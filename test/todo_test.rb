@@ -1,8 +1,7 @@
+require 'bundler/setup'
 require 'minitest/autorun'
 require "minitest/reporters"
 Minitest::Reporters.use!
-require 'simplecov'
-SimpleCov.start
 
 require_relative '../lib/todo'
 
@@ -125,5 +124,17 @@ class TodoListTest < MiniTest::Test
       todo.done?
     end
     assert_equal(new_list.size, 1)
+  end
+
+  def test_to_s_with_due_date
+    @todo2.due_date = Date.civil(2017, 4, 15)
+    output = <<-OUTPUT.chomp.gsub(/^\s+/, '')
+    ---- Today's Todos ----
+    [ ] Buy milk
+    [ ] Clean room (Due: Saturday April 15)
+    [ ] Go to gym
+    OUTPUT
+
+    assert_equal(output, @list.to_s)
   end
 end
